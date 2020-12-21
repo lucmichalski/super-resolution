@@ -46,23 +46,19 @@ ADD src/requirements.txt /src/requirements.txt
 
 RUN pip3 install --no-cache -r requirements.txt
 
+RUN echo $LD_LIBRARY_PATH && \
+    ln -s /usr/lib/x86_64-linux-gnu/libcublas.so.10.2.2.89 /usr/lib/x86_64-linux-gnu/libcublas.so.10.0 && \
+    ln -s /usr/local/cuda-10.2/targets/x86_64-linux/lib/libcusolver.so.10.3.0.89 /usr/lib/x86_64-linux-gnu/libcusolver.so.10.1 && \
+    ln -s /usr/local/cuda-10.2/targets/x86_64-linux/lib/libcudart.so.10.2.89 /usr/lib/x86_64-linux-gnu/libcudart.so.10.1 && \
+    ln -s /usr/local/cuda-10.2/targets/x86_64-linux/lib/libcurand.so.10.1.2.89  /usr/lib/x86_64-linux-gnu/libcurand.so.10.1 && \
+    ln -s /usr/local/cuda-10.2/targets/x86_64-linux/lib/libcusparse.so.10.3.1.89  /usr/lib/x86_64-linux-gnu/libcusparse.so.10.1 && \
+    ln -s /usr/local/cuda-10.2/targets/x86_64-linux/lib/libcufft.so.10.1.2.89  /usr/lib/x86_64-linux-gnu/libcufft.so.10.1
+
 COPY ./src .
 COPY ./docker-entrypoint.sh .
 
 EXPOSE 5000
 VOLUME ["/src/uploads", "/src/weights", "/src/results"]
-
-# ENV LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu/:/usr/local/cuda-10.2/targets/x86_64-linux/lib/
-
-RUN echo $LD_LIBRARY_PATH && \
-    ln -s /usr/lib/x86_64-linux-gnu/libcublas.so.10.2.2.89 /usr/lib/x86_64-linux-gnu/libcublas.so.10.0 && \
-    ln -s /usr/local/cuda-10.2/targets/x86_64-linux/lib/libcusolver.so.10.3.0.89 /usr/lib/x86_64-linux-gnu/libcusolver.so.10.0 && \
-    ln -s /usr/local/cuda-10.2/targets/x86_64-linux/lib/libcudart.so.10.2.89 /usr/lib/x86_64-linux-gnu/libcudart.so.10.0 && \
-    ln -s /usr/local/cuda-10.2/targets/x86_64-linux/lib/libcurand.so.10.1.2.89  /usr/lib/x86_64-linux-gnu/libcurand.so.10.0 && \
-    ln -s /usr/local/cuda-10.2/targets/x86_64-linux/lib/libcusparse.so.10.3.1.89  /usr/lib/x86_64-linux-gnu/libcusparse.so.10.0 && \
-    ln -s /usr/local/cuda-10.2/targets/x86_64-linux/lib/libcufft.so.10.1.2.89  /usr/lib/x86_64-linux-gnu/libcufft.so.10.0
-
-RUN apt-get update && apt-get install -y mlocate && updatedb
 
 ENTRYPOINT ["./docker-entrypoint.sh"]
 # ENTRYPOINT ["python3"]
