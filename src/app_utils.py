@@ -26,31 +26,24 @@ def blur(image, x0, x1, y0, y1, sigma=1, multichannel=True):
     im[y0:y1,x0:x1] = blur_sub_im
     return im
 
-
-
 def download(url, filename):
     data = requests.get(url).content
     with open(filename, 'wb') as handler:
         handler.write(data)
-
     return filename
-
 
 def generate_random_filename(upload_directory, extension):
     filename = str(uuid4())
     filename = os.path.join(upload_directory, filename + "." + extension)
     return filename
 
-
 def clean_me(filename):
     if os.path.exists(filename):
         os.remove(filename)
 
-
 def clean_all(files):
     for me in files:
         clean_me(me)
-
 
 def create_directory(path):
     os.system("mkdir -p %s" % os.path.dirname(path))
@@ -102,12 +95,9 @@ def resize_img(path, w, h):
 
 def square_center_crop(image_path, output_path):
     im = Image.open(image_path)
-
     width, height = im.size
-
     new_width = min(width, height)
     new_height = new_width
-
     left = (width - new_width)/2
     top = (height - new_height)/2
     right = (width + new_width)/2
@@ -126,11 +116,8 @@ def image_crop(image_path, output_path, x0, y0, x1, y1):
     """
     
     image = cv2.imread(image_path)
-
     print(x0, y0, x1, y1)
     crop = image[y0:y1, x0:x1]
-
     print(crop)
-
     cv2.imwrite(output_path, crop)
 
